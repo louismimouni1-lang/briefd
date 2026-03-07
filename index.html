@@ -8,22 +8,22 @@
 <meta name="apple-mobile-web-app-title" content="Briefd">
 <meta name="theme-color" content="#000000">
 <link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon-512.png">
 <title>Briefd</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&display=swap" rel="stylesheet">
 <style>
 :root {
   --black: #000;
-  --bg: #0d0d0d;
-  --card: #1a1a1a;
-  --card2: #222;
-  --border: #2a2a2a;
-  --border2: #333;
-  --text: #fff;
-  --text-2: #ababab;
-  --text-3: #555;
+  --bg: #0a0a0a;
+  --card: #141414;
+  --card2: #1c1c1c;
+  --card-top: #0d0d0d;
+  --border: #1e1e1e;
+  --border2: #2a2a2a;
+  --text: #f0f0f0;
+  --text-2: #888;
+  --text-3: #444;
   --orange: #ff5c00;
-  --orange-dim: rgba(255,92,0,.12);
+  --orange-dim: rgba(255,92,0,.1);
   --green: #30d780;
   --green-dim: rgba(48,215,128,.1);
   --red: #ff4545;
@@ -32,458 +32,131 @@
   --purple-dim: rgba(167,139,250,.1);
   --amber: #fbbf24;
   --amber-dim: rgba(251,191,36,.1);
-  --r: 14px;
+  --r: 16px;
   --r-sm: 10px;
   --safe-top: env(safe-area-inset-top, 44px);
   --safe-bottom: env(safe-area-inset-bottom, 20px);
-  --nav-h: 64px;
+  --nav-h: 58px;
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-html { height: 100%; }
-
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; }
 body {
-  background: var(--black);
-  color: var(--text);
-  font-family: 'Sora', sans-serif;
-  height: 100%;
-  max-width: 430px;
-  margin: 0 auto;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  background: var(--black); color: var(--text);
+  font-family: 'Sora', sans-serif; height: 100%;
+  max-width: 430px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
-
-/* ── HEADER ── */
 .header {
   background: var(--black);
   padding: calc(var(--safe-top) + 10px) 20px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: sticky; top: 0; z-index: 100;
 }
-
-.header-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.app-name {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -.8px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 2px;
-}
-
+.header-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:14px; }
+.app-name { font-size:28px; font-weight:700; letter-spacing:-.8px; }
+.header-right { display:flex; align-items:center; gap:10px; padding-bottom:2px; }
 .live-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--green-dim);
-  border: 1px solid rgba(48,215,128,.2);
-  border-radius: 20px;
-  padding: 5px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--green);
+  display:flex; align-items:center; gap:5px;
+  background:var(--green-dim); border:1px solid rgba(48,215,128,.2);
+  border-radius:20px; padding:5px 10px; font-size:11px; font-weight:600; color:var(--green);
 }
-
-.live-dot {
-  width: 5px; height: 5px;
-  background: var(--green);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
+.live-dot { width:5px; height:5px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.clock { font-size:12px; color:var(--text-3); font-weight:500; font-variant-numeric:tabular-nums; }
 
-.clock { font-size: 12px; color: var(--text-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+.markets { display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.markets::-webkit-scrollbar { display:none; }
+.mpill { flex-shrink:0; background:var(--card); border-radius:20px; padding:6px 12px; display:flex; align-items:center; gap:7px; border:1px solid var(--border); }
+.mpill-label { font-size:10.5px; font-weight:600; color:var(--text-2); }
+.mpill-val { font-size:10.5px; font-weight:500; color:var(--text); font-variant-numeric:tabular-nums; }
+.mpill-chg { font-size:10.5px; font-weight:600; font-variant-numeric:tabular-nums; }
+.up { color:var(--green); } .dn { color:var(--red); }
 
-/* ── MARKETS ── */
-.markets {
-  display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-}
-.markets::-webkit-scrollbar { display: none; }
+.filters { background:var(--black); display:flex; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--border); padding:0 20px; }
+.filters::-webkit-scrollbar { display:none; }
+.ftab { flex-shrink:0; padding:11px 14px 10px; font-size:13px; font-weight:500; color:var(--text-3); background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap; font-family:'Sora',sans-serif; transition:color .15s,border-color .15s; }
+.ftab.active { color:var(--text); border-bottom-color:var(--text); font-weight:600; }
 
-.mpill {
-  flex-shrink: 0;
-  background: var(--card);
-  border-radius: 20px;
-  padding: 6px 12px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  border: 1px solid var(--border);
-}
+.feed { padding:14px 14px calc(var(--nav-h) + var(--safe-bottom) + 16px); display:flex; flex-direction:column; gap:10px; }
+.date-row { display:flex; align-items:center; justify-content:space-between; padding:2px 4px 4px; }
+.date-label { font-size:11px; font-weight:600; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; }
+.refresh-btn { background:var(--card); border:1px solid var(--border2); border-radius:20px; padding:5px 12px; font-size:11px; font-weight:600; color:var(--text-3); cursor:pointer; font-family:'Sora',sans-serif; }
+.refresh-btn:active { opacity:.7; }
 
-.mpill-label { font-size: 10.5px; font-weight: 600; color: var(--text-2); }
-.mpill-val { font-size: 10.5px; font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
-.mpill-chg { font-size: 10.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.up { color: var(--green); }
-.dn { color: var(--red); }
+.loading-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px; }
+.spinner { width:26px; height:26px; border:2px solid var(--border2); border-top-color:var(--orange); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-text { font-size:13px; color:var(--text-3); }
 
-/* ── FILTERS ── */
-.filters {
-  background: var(--black);
-  display: flex;
-  overflow-x: auto;
-  scrollbar-width: none;
-  border-bottom: 1px solid var(--border);
-  padding: 0 20px;
-}
-.filters::-webkit-scrollbar { display: none; }
+/* ── CARD style C ── */
+.card { background:var(--card); border-radius:var(--r); overflow:hidden; cursor:pointer; border:1px solid var(--border); animation:rise .3s ease both; transition:opacity .15s,transform .1s; }
+@keyframes rise { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.card:active { opacity:.75; transform:scale(.98); }
 
-.ftab {
-  flex-shrink: 0;
-  padding: 11px 14px 10px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-3);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: 'Sora', sans-serif;
-  transition: color .15s, border-color .15s;
-}
-.ftab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
+.card-top-section { background:var(--card-top); border-bottom:1px solid var(--border); padding:15px 16px 14px; }
+.card-top-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.card-top-right { display:flex; align-items:center; gap:8px; }
+.card-time { font-size:11px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+.save-btn { background:none; border:none; cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; color:var(--text-3); border-radius:50%; }
+.save-btn svg { width:15px; height:15px; }
 
-/* ── FEED ── */
-.feed {
-  padding: 14px 14px calc(var(--nav-h) + var(--safe-bottom) + 14px);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.card-headline { font-family:'Fraunces',serif; font-size:18px; font-weight:600; line-height:1.3; color:var(--text); letter-spacing:-.25px; }
+.card-bottom { padding:13px 16px 14px; }
+.card-source { font-size:11px; color:var(--text-3); margin-bottom:10px; }
 
-.date-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px 4px 4px;
-}
+.tag { font-size:10.5px; font-weight:600; padding:4px 9px; border-radius:7px; }
+.t-markets { background:var(--orange-dim); color:var(--orange); }
+.t-ma      { background:var(--purple-dim); color:var(--purple); }
+.t-macro   { background:var(--red-dim);    color:var(--red); }
+.t-tech    { background:var(--green-dim);  color:var(--green); }
+.t-hk      { background:var(--amber-dim);  color:var(--amber); }
 
-.date-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-3);
-  letter-spacing: .07em;
-  text-transform: uppercase;
-}
-
-.refresh-btn {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-3);
-  cursor: pointer;
-  font-family: 'Sora', sans-serif;
-}
-.refresh-btn:active { opacity: .7; }
-
-/* ── LOADING ── */
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  gap: 16px;
-}
-
-.spinner {
-  width: 26px; height: 26px;
-  border: 2px solid var(--border);
-  border-top-color: var(--orange);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-size: 13px; color: var(--text-3); }
-
-/* ── CARD ── */
-.card {
-  background: var(--card);
-  border-radius: var(--r);
-  overflow: hidden;
-  cursor: pointer;
-  transition: background .15s, transform .1s;
-  border: 1px solid var(--border);
-  animation: rise .3s ease both;
-}
-@keyframes rise { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-.card:active { background: var(--card2); transform: scale(.985); }
-
-/* Card image */
-.card-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  display: block;
-  background: var(--card2);
-}
-
-.card-img-placeholder {
-  width: 100%;
-  height: 160px;
-  background: linear-gradient(135deg, var(--card2) 0%, var(--border) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-}
-
-.card-body { padding: 14px 15px 13px; }
-
-.card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.tag {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 4px 9px;
-  border-radius: 7px;
-}
-.t-markets { background: var(--orange-dim); color: var(--orange); }
-.t-ma      { background: var(--purple-dim); color: var(--purple); }
-.t-macro   { background: var(--red-dim);    color: var(--red); }
-.t-tech    { background: var(--green-dim);  color: var(--green); }
-.t-hk      { background: var(--amber-dim);  color: var(--amber); }
-
-.card-top-right { display: flex; align-items: center; gap: 9px; }
-.card-time { font-size: 11px; color: var(--text-3); font-variant-numeric: tabular-nums; }
-
-.save-btn {
-  background: none; border: none; cursor: pointer;
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-3);
-  transition: color .15s;
-  border-radius: 50%;
-}
-.save-btn.saved { color: var(--amber); }
-.save-btn svg { width: 16px; height: 16px; }
-
-.card-headline {
-  font-family: 'Fraunces', serif;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--text);
-  margin-bottom: 5px;
-  letter-spacing: -.2px;
-}
-
-.card-source { font-size: 11px; color: var(--text-3); margin-bottom: 11px; }
-
-/* THE SIGNAL */
-.signal-box {
-  background: rgba(255,255,255,.04);
-  border-radius: var(--r-sm);
-  border-left: 2.5px solid var(--orange);
-  padding: 10px 12px;
-  margin-bottom: 12px;
-}
-.signal-label {
-  font-size: 9px; font-weight: 700;
-  color: var(--orange);
-  letter-spacing: .12em; text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.signal-text { font-size: 13px; line-height: 1.55; color: var(--text-2); }
-
-.card-footer { display: flex; align-items: center; justify-content: space-between; }
-.card-dots { font-size: 11px; color: var(--border2); letter-spacing: 2px; }
-.dive-btn { font-size: 12px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 4px; }
-.dive-btn svg { width: 13px; height: 13px; }
+.signal-label { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px; }
+.signal-text { font-size:13px; line-height:1.6; color:var(--text-2); }
+.card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; }
+.card-dots { font-size:11px; color:var(--border2); letter-spacing:2px; }
+.dive-btn { font-size:12px; font-weight:600; color:var(--text-2); display:flex; align-items:center; gap:4px; }
+.dive-btn svg { width:12px; height:12px; }
 
 /* ── SHEET ── */
-.overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 200;
-  opacity: 0; pointer-events: none;
-  transition: opacity .25s;
-}
-.overlay.open { opacity: 1; pointer-events: all; }
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); z-index:200; opacity:0; pointer-events:none; transition:opacity .25s; }
+.overlay.open { opacity:1; pointer-events:all; }
+.sheet { position:fixed; bottom:0; left:50%; transform:translate(-50%,100%); width:100%; max-width:430px; background:var(--bg); border-radius:22px 22px 0 0; border-top:1px solid var(--border); z-index:201; max-height:92vh; display:flex; flex-direction:column; transition:transform .32s cubic-bezier(.32,.72,0,1); }
+.sheet.open { transform:translate(-50%,0); }
+.sheet-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:12px auto 0; flex-shrink:0; }
+.sheet-scroll { overflow-y:auto; flex:1; padding:0 20px 0; }
 
-.sheet {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translate(-50%, 100%);
-  width: 100%; max-width: 430px;
-  background: var(--bg);
-  border-radius: 22px 22px 0 0;
-  border-top: 1px solid var(--border);
-  z-index: 201;
-  max-height: 90vh;
-  display: flex; flex-direction: column;
-  transition: transform .32s cubic-bezier(.32,.72,0,1);
-}
-.sheet.open { transform: translate(-50%, 0); }
+.sh-top-section { background:var(--card-top); border-bottom:1px solid var(--border); padding:18px 0 16px; margin:16px -20px 0; padding-left:20px; padding-right:20px; }
+.sh-tag-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.sh-time { font-size:11px; color:var(--text-3); margin-left:auto; }
+.sh-headline { font-family:'Fraunces',serif; font-size:22px; font-weight:600; line-height:1.28; letter-spacing:-.3px; color:var(--text); }
+.sh-body { padding-top:16px; }
+.sh-source { font-size:11.5px; color:var(--text-3); margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+.sh-section { margin-bottom:20px; }
+.sh-section-title { font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:9px; }
+.sh-signal { font-size:14px; line-height:1.7; color:#c0a898; background:rgba(255,92,0,.05); border-left:2.5px solid var(--orange); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:12px 14px; }
+.sh-text { font-size:14px; line-height:1.8; color:var(--text-2); font-weight:300; }
+.impl-list { display:flex; flex-direction:column; gap:8px; }
+.impl-item { display:flex; gap:12px; align-items:flex-start; background:var(--card); border-radius:var(--r-sm); padding:11px 12px; border:1px solid var(--border); }
+.impl-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+.impl-text { font-size:13px; line-height:1.55; color:var(--text-2); font-weight:300; }
 
-.sheet-handle {
-  width: 36px; height: 4px;
-  background: var(--border2); border-radius: 2px;
-  margin: 12px auto 0; flex-shrink: 0;
-}
-
-.sheet-img {
-  width: 100%; height: 180px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.sheet-scroll { overflow-y: auto; flex: 1; padding: 18px 20px 0; }
-
-.sh-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-.sh-time { font-size: 11px; color: var(--text-3); margin-left: auto; }
-
-.sh-headline {
-  font-family: 'Fraunces', serif;
-  font-size: 22px; font-weight: 600;
-  line-height: 1.3; letter-spacing: -.3px;
-  color: var(--text); margin-bottom: 6px;
-}
-
-.sh-source {
-  font-size: 11.5px; color: var(--text-3);
-  margin-bottom: 16px; padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.sh-section { margin-bottom: 18px; }
-.sh-section-title {
-  font-size: 9.5px; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--text-3); margin-bottom: 9px;
-}
-
-.sh-signal {
-  background: rgba(255,92,0,.07);
-  border-left: 2.5px solid var(--orange);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  padding: 12px 14px;
-  font-size: 14px; line-height: 1.65;
-  color: #e0c8b8;
-}
-
-.sh-text { font-size: 14px; line-height: 1.78; color: var(--text-2); font-weight: 300; }
-
-.impl-list { display: flex; flex-direction: column; gap: 8px; }
-.impl-item {
-  display: flex; gap: 12px; align-items: flex-start;
-  background: var(--card); border-radius: var(--r-sm);
-  padding: 11px 12px; border: 1px solid var(--border);
-}
-.impl-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-.impl-text { font-size: 13px; line-height: 1.55; color: var(--text-2); font-weight: 300; }
-
-.sh-footer {
-  padding: 12px 20px calc(12px + var(--safe-bottom));
-  border-top: 1px solid var(--border);
-  display: flex; gap: 10px; flex-shrink: 0;
-  background: var(--bg);
-}
-
-.btn-back {
-  flex: 1; padding: 13px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border2);
-  background: none; font-size: 13px; font-weight: 600;
-  color: var(--text-2); cursor: pointer;
-  font-family: 'Sora', sans-serif;
-}
-
-.btn-source {
-  flex: 2; padding: 13px;
-  border-radius: var(--r-sm);
-  border: none; background: var(--text);
-  font-size: 13px; font-weight: 700;
-  color: var(--black); cursor: pointer;
-  font-family: 'Sora', sans-serif;
-}
+.sh-footer { padding:12px 20px calc(12px + var(--safe-bottom)); border-top:1px solid var(--border); display:flex; gap:10px; flex-shrink:0; background:var(--bg); }
+.btn-back { flex:1; padding:13px; border-radius:var(--r-sm); border:1px solid var(--border2); background:none; font-size:13px; font-weight:600; color:var(--text-2); cursor:pointer; font-family:'Sora',sans-serif; }
+.btn-source { flex:2; padding:13px; border-radius:var(--r-sm); border:none; background:var(--text); font-size:13px; font-weight:700; color:#000; cursor:pointer; font-family:'Sora',sans-serif; }
 
 /* ── NAV ── */
-.nav {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100%; max-width: 430px;
-  background: rgba(10,10,10,.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: flex;
-  padding: 0 30px;
-  padding-bottom: var(--safe-bottom);
-  height: calc(var(--nav-h) + var(--safe-bottom));
-  z-index: 100;
-  align-items: flex-start;
-  padding-top: 10px;
-}
-
-.nav-item {
-  flex: 1;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 5px;
-  cursor: pointer; padding: 4px 0;
-  border-radius: 10px;
-  transition: opacity .15s;
-}
-
-.nav-item:active { opacity: .6; }
-
-.nav-icon-wrap {
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.nav-icon-wrap svg {
-  width: 22px; height: 22px;
-  stroke: var(--text-3);
-  fill: none;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke .15s;
-}
-
-.nav-item.active .nav-icon-wrap svg { stroke: var(--text); }
-
-.nav-label {
-  font-size: 10px; font-weight: 500;
-  color: var(--text-3);
-  transition: color .15s;
-}
-.nav-item.active .nav-label { color: var(--text); font-weight: 600; }
+.nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:rgba(8,8,8,.98); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid var(--border); display:flex; padding:0 40px; padding-bottom:var(--safe-bottom); height:calc(var(--nav-h) + var(--safe-bottom)); z-index:100; align-items:flex-start; padding-top:10px; }
+.nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; padding:4px 0; transition:opacity .15s; }
+.nav-item:active { opacity:.6; }
+.nav-icon-wrap { width:26px; height:26px; display:flex; align-items:center; justify-content:center; }
+.nav-icon-wrap svg { width:21px; height:21px; stroke:var(--text-3); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; transition:stroke .15s; }
+.nav-item.active .nav-icon-wrap svg { stroke:var(--text); }
+.nav-label { font-size:10px; font-weight:500; color:var(--text-3); }
+.nav-item.active .nav-label { color:var(--text); font-weight:600; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-row">
     <div class="app-name">Briefd</div>
@@ -492,33 +165,14 @@ body {
       <div class="clock" id="clock">--:-- HKT</div>
     </div>
   </div>
-
-  <!-- S&P500 · HSI · NIKKEI · GOLD -->
-  <div class="markets" id="markets">
-    <div class="mpill">
-      <span class="mpill-label">S&P 500</span>
-      <span class="mpill-val" id="spx-val">–</span>
-      <span class="mpill-chg" id="spx-chg">–</span>
-    </div>
-    <div class="mpill">
-      <span class="mpill-label">HSI</span>
-      <span class="mpill-val" id="hsi-val">–</span>
-      <span class="mpill-chg" id="hsi-chg">–</span>
-    </div>
-    <div class="mpill">
-      <span class="mpill-label">Nikkei</span>
-      <span class="mpill-val" id="nk-val">–</span>
-      <span class="mpill-chg" id="nk-chg">–</span>
-    </div>
-    <div class="mpill">
-      <span class="mpill-label">Gold</span>
-      <span class="mpill-val" id="gold-val">–</span>
-      <span class="mpill-chg" id="gold-chg">–</span>
-    </div>
+  <div class="markets">
+    <div class="mpill"><span class="mpill-label">S&P 500</span><span class="mpill-val" id="spx-val">–</span><span class="mpill-chg" id="spx-chg"></span></div>
+    <div class="mpill"><span class="mpill-label">HSI</span><span class="mpill-val" id="hsi-val">–</span><span class="mpill-chg" id="hsi-chg"></span></div>
+    <div class="mpill"><span class="mpill-label">Nikkei</span><span class="mpill-val" id="nk-val">–</span><span class="mpill-chg" id="nk-chg"></span></div>
+    <div class="mpill"><span class="mpill-label">Gold</span><span class="mpill-val" id="gold-val">–</span><span class="mpill-chg" id="gold-chg"></span></div>
   </div>
 </div>
 
-<!-- FILTERS -->
 <div class="filters">
   <button class="ftab active" onclick="setFilter('all',this)">All</button>
   <button class="ftab" onclick="setFilter('markets',this)">Markets</button>
@@ -528,7 +182,6 @@ body {
   <button class="ftab" onclick="setFilter('hk',this)">HK Focus</button>
 </div>
 
-<!-- FEED -->
 <div class="feed" id="feed">
   <div class="date-row">
     <div class="date-label" id="dateLabel">Loading...</div>
@@ -540,7 +193,6 @@ body {
   </div>
 </div>
 
-<!-- SHEET -->
 <div class="overlay" id="overlay" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
@@ -551,22 +203,16 @@ body {
   </div>
 </div>
 
-<!-- NAV — 2 tabs, SVG icons -->
 <nav class="nav">
   <div class="nav-item active" id="nav-feed" onclick="switchTab('feed')">
     <div class="nav-icon-wrap">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </div>
     <span class="nav-label">Feed</span>
   </div>
   <div class="nav-item" id="nav-saved" onclick="switchTab('saved')">
     <div class="nav-icon-wrap">
-      <svg viewBox="0 0 24 24">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
     </div>
     <span class="nav-label">Saved</span>
   </div>
@@ -574,73 +220,40 @@ body {
 
 <script>
 const TC = { markets:'t-markets', ma:'t-ma', macro:'t-macro', tech:'t-tech', hk:'t-hk' }
-const TAG_EMOJI = { markets:'📈', ma:'🤝', macro:'🌍', tech:'💡', hk:'🏙️' }
-const CACHE_KEY = 'briefd_v2'
+const SC = { markets:'var(--orange)', ma:'var(--purple)', macro:'var(--red)', tech:'var(--green)', hk:'var(--amber)' }
+const CACHE_KEY = 'briefd_v3'
 const CACHE_TTL = 3 * 60 * 60 * 1000
+let ALL_NEWS = [], filter = 'all', saved = new Set(), current = null, activeTab = 'feed'
 
-let NEWS = [], ALL_NEWS = [], filter = 'all', saved = new Set(), current = null, activeTab = 'feed'
-
-// ── CLOCK ──
 function updateClock() {
-  const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Hong_Kong' }))
-  document.getElementById('clock').textContent =
-    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ' HKT'
+  const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Hong_Kong'}))
+  document.getElementById('clock').textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' HKT'
 }
-updateClock(); setInterval(updateClock, 30000)
+updateClock(); setInterval(updateClock,30000)
 
-// ── DATE ──
 function updateDate() {
-  const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Hong_Kong' }))
-  document.getElementById('dateLabel').textContent = d.toLocaleDateString('en-GB', {
-    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
-  }).toUpperCase()
+  const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Hong_Kong'}))
+  document.getElementById('dateLabel').textContent = d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).toUpperCase()
 }
 updateDate()
 
-// ── MARKETS (static for now, realistic values) ──
 function loadMarkets() {
-  // Static snapshot — realistic as of early March 2026
-  const mkts = [
-    { id: 'spx', val: '5,771', chg: '+0.4%', up: true },
-    { id: 'hsi', val: '19,842', chg: '+1.2%', up: true },
-    { id: 'nk',  val: '37,120', chg: '−0.6%', up: false },
-    { id: 'gold',val: '$2,918', chg: '+0.7%', up: true },
-  ]
+  const mkts = [{id:'spx',val:'5,771',chg:'+0.4%',up:true},{id:'hsi',val:'19,842',chg:'+1.2%',up:true},{id:'nk',val:'37,120',chg:'−0.6%',up:false},{id:'gold',val:'$2,918',chg:'+0.7%',up:true}]
   mkts.forEach(m => {
     document.getElementById(m.id+'-val').textContent = m.val
     const el = document.getElementById(m.id+'-chg')
-    el.textContent = m.chg
-    el.className = 'mpill-chg ' + (m.up ? 'up' : 'dn')
+    el.textContent = m.chg; el.className = 'mpill-chg '+(m.up?'up':'dn')
   })
 }
 loadMarkets()
 
-// ── IMAGE ──
-function getImageUrl(headline, category) {
-  const queries = {
-    markets: 'stock market finance charts',
-    ma: 'business deal merger handshake',
-    macro: 'global economy world map',
-    tech: 'technology innovation digital',
-    hk: 'hong kong skyline city'
-  }
-  const q = encodeURIComponent((queries[category] || 'business news') + ' ' + headline.split(' ').slice(0,4).join(' '))
-  return `https://image.pollinations.ai/prompt/${q}?width=600&height=300&nologo=true&seed=${Math.abs(headline.split('').reduce((a,c)=>a+c.charCodeAt(0),0))}`
-}
-
-// ── FETCH NEWS ──
 async function fetchNews() {
   const cached = localStorage.getItem(CACHE_KEY)
-  if (cached) {
-    try {
-      const { data, timestamp } = JSON.parse(cached)
-      if (Date.now() - timestamp < CACHE_TTL) return data
-    } catch(e) {}
-  }
-  const res = await fetch('/api/news', { method: 'POST' })
-  if (!res.ok) throw new Error('Server error: ' + res.status)
+  if (cached) { try { const {data,timestamp}=JSON.parse(cached); if(Date.now()-timestamp<CACHE_TTL) return data } catch(e){} }
+  const res = await fetch('/api/news',{method:'POST'})
+  if (!res.ok) throw new Error('Server error: '+res.status)
   const data = await res.json()
-  localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }))
+  localStorage.setItem(CACHE_KEY,JSON.stringify({data,timestamp:Date.now()}))
   return data
 }
 
@@ -648,154 +261,120 @@ async function loadNews() {
   document.getElementById('loadingState').style.display = 'flex'
   try {
     const data = await fetchNews()
-    ALL_NEWS = data.stories
-    NEWS = ALL_NEWS
-    renderFeed()
+    ALL_NEWS = data.stories; renderFeed()
   } catch(err) {
-    document.getElementById('loadingState').innerHTML = `
-      <div style="font-size:13px;color:var(--red);text-align:center;line-height:1.6">
-        Error loading news<br>
-        <span style="color:var(--text-3);font-size:11px">${err.message}</span>
-      </div>`
+    document.getElementById('loadingState').innerHTML = `<div style="font-size:13px;color:var(--red);text-align:center;line-height:1.6">Error loading news<br><span style="color:var(--text-3);font-size:11px">${err.message}</span></div>`
   }
 }
 
 async function forceRefresh() {
-  localStorage.removeItem(CACHE_KEY)
-  NEWS = []; ALL_NEWS = []
-  document.getElementById('loadingState').style.display = 'flex'
-  document.getElementById('loadingState').innerHTML = '<div class="spinner"></div><div class="loading-text">Refreshing brief...</div>'
-  document.getElementById('feed').querySelectorAll('.card').forEach(c => c.remove())
+  localStorage.removeItem(CACHE_KEY); ALL_NEWS = []
+  const ls = document.getElementById('loadingState')
+  ls.style.display='flex'; ls.innerHTML='<div class="spinner"></div><div class="loading-text">Refreshing...</div>'
+  document.getElementById('feed').querySelectorAll('.card').forEach(c=>c.remove())
   await loadNews()
 }
 
-// ── RENDER ──
-function tc(cat) { return TC[cat] || TC[(cat||'').toLowerCase()] || 't-hk' }
-function emoji(cat) { return TAG_EMOJI[cat] || TAG_EMOJI[(cat||'').toLowerCase()] || '📰' }
+function tc(cat) { return TC[cat]||TC[(cat||'').toLowerCase()]||'t-hk' }
+function sc(cat) { return SC[cat]||SC[(cat||'').toLowerCase()]||'var(--amber)' }
 
 function renderFeed() {
   const feed = document.getElementById('feed')
-  feed.querySelectorAll('.card').forEach(c => c.remove())
-  document.getElementById('loadingState').style.display = 'none'
+  feed.querySelectorAll('.card').forEach(c=>c.remove())
+  document.getElementById('loadingState').style.display='none'
+  const src = activeTab==='saved' ? ALL_NEWS.filter(n=>saved.has(n.id)) : ALL_NEWS
+  const items = filter==='all' ? src : src.filter(n=>n.category===filter)
+  document.getElementById('refreshBtn').textContent = '↻ '+items.length+' stor'+(items.length===1?'y':'ies')
 
-  const src = activeTab === 'saved' ? ALL_NEWS.filter(n => saved.has(n.id)) : ALL_NEWS
-  const items = filter === 'all' ? src : src.filter(n => n.category === filter)
-
-  document.getElementById('refreshBtn').textContent = '↻ ' + items.length + ' stor' + (items.length === 1 ? 'y' : 'ies')
-
-  if (items.length === 0 && activeTab === 'saved') {
-    const empty = document.createElement('div')
-    empty.style = 'text-align:center;padding:50px 20px;font-size:13px;color:var(--text-3)'
-    empty.textContent = 'No saved stories yet'
-    feed.appendChild(empty)
-    return
+  if (items.length===0 && activeTab==='saved') {
+    const e=document.createElement('div')
+    e.style='text-align:center;padding:50px 20px;font-size:13px;color:var(--text-3)'
+    e.textContent='No saved stories yet'; feed.appendChild(e); return
   }
 
-  items.forEach((item, i) => {
-    const imgUrl = getImageUrl(item.headline, item.category)
+  items.forEach((item,i) => {
+    const isSaved = saved.has(item.id)
     const c = document.createElement('div')
-    c.className = 'card'
-    c.style.animationDelay = (i * 0.05) + 's'
-    c.innerHTML = `
-      <img class="card-img" src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="card-img-placeholder" style="display:none">${emoji(item.category)}</div>
-      <div class="card-body">
-        <div class="card-top">
+    c.className='card'; c.style.animationDelay=(i*0.05)+'s'
+    c.innerHTML=`
+      <div class="card-top-section">
+        <div class="card-top-row">
           <span class="tag ${tc(item.category)}">${item.shortTag}</span>
           <div class="card-top-right">
             <span class="card-time">${item.time}</span>
-            <button class="save-btn ${saved.has(item.id) ? 'saved' : ''}" onclick="sv(event,${item.id})">
-              <svg viewBox="0 0 24 24" fill="${saved.has(item.id) ? 'var(--amber)' : 'none'}" stroke="${saved.has(item.id) ? 'var(--amber)' : 'currentColor'}">
+            <button class="save-btn${isSaved?' saved':''}" onclick="sv(event,${item.id})">
+              <svg viewBox="0 0 24 24" fill="${isSaved?'var(--amber)':'none'}" stroke="${isSaved?'var(--amber)':'currentColor'}">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
               </svg>
             </button>
           </div>
         </div>
         <div class="card-headline">${item.headline}</div>
+      </div>
+      <div class="card-bottom">
         <div class="card-source">${item.source}</div>
-        <div class="signal-box">
-          <div class="signal-label">The Signal</div>
-          <div class="signal-text">${item.takeaway}</div>
-        </div>
+        <div class="signal-label" style="color:${sc(item.category)}">The Signal</div>
+        <div class="signal-text">${item.takeaway}</div>
         <div class="card-footer">
           <span class="card-dots">· · ·</span>
-          <div class="dive-btn">Deep dive
-            <svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+          <div class="dive-btn">Deep dive <svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
       </div>`
-    c.addEventListener('click', e => { if (!e.target.closest('.save-btn')) openSheet(item.id) })
+    c.addEventListener('click',e=>{if(!e.target.closest('.save-btn'))openSheet(item.id)})
     feed.appendChild(c)
   })
 }
 
-function setFilter(cat, btn) {
-  filter = cat
-  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'))
-  btn.classList.add('active')
-  if (ALL_NEWS.length) renderFeed()
+function setFilter(cat,btn) {
+  filter=cat; document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active')); btn.classList.add('active')
+  if(ALL_NEWS.length) renderFeed()
 }
-
-function sv(e, id) {
-  e.stopPropagation()
-  saved.has(id) ? saved.delete(id) : saved.add(id)
-  renderFeed()
-}
-
-// ── TABS ──
+function sv(e,id) { e.stopPropagation(); saved.has(id)?saved.delete(id):saved.add(id); renderFeed() }
 function switchTab(tab) {
-  activeTab = tab
-  document.getElementById('nav-feed').classList.toggle('active', tab === 'feed')
-  document.getElementById('nav-saved').classList.toggle('active', tab === 'saved')
-  if (ALL_NEWS.length) renderFeed()
+  activeTab=tab
+  document.getElementById('nav-feed').classList.toggle('active',tab==='feed')
+  document.getElementById('nav-saved').classList.toggle('active',tab==='saved')
+  if(ALL_NEWS.length) renderFeed()
 }
 
-// ── SHEET ──
 function openSheet(id) {
-  const src = ALL_NEWS
-  current = src.find(n => n.id === id)
-  const c = current
-  const imgUrl = getImageUrl(c.headline, c.category)
-  document.getElementById('sheetContent').innerHTML = `
-    <img class="sheet-img" src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
-    <div class="sh-tag-row">
-      <span class="tag ${tc(c.category)}">${c.shortTag}</span>
-      <span class="sh-time">${c.time} HKT · ${c.source}</span>
-    </div>
-    <div class="sh-headline">${c.headline}</div>
-    <div class="sh-source">${c.source}</div>
-    <div class="sh-section">
-      <div class="sh-section-title">The Signal</div>
-      <div class="sh-signal">${c.takeaway}</div>
-    </div>
-    <div class="sh-section">
-      <div class="sh-section-title">Context</div>
-      <div class="sh-text">${c.body}</div>
-    </div>
-    <div class="sh-section">
-      <div class="sh-section-title">Why It Matters</div>
-      <div class="impl-list">${c.implications.map(i => `
-        <div class="impl-item">
-          <div class="impl-icon">${i.icon}</div>
-          <div class="impl-text">${i.text}</div>
-        </div>`).join('')}
+  current=ALL_NEWS.find(n=>n.id===id); const c=current
+  document.getElementById('sheetContent').innerHTML=`
+    <div class="sh-top-section">
+      <div class="sh-tag-row">
+        <span class="tag ${tc(c.category)}">${c.shortTag}</span>
+        <span class="sh-time">${c.time} HKT · ${c.source}</span>
       </div>
+      <div class="sh-headline">${c.headline}</div>
     </div>
-    <div style="height:8px"></div>`
+    <div class="sh-body">
+      <div class="sh-source">${c.source}</div>
+      <div class="sh-section">
+        <div class="sh-section-title" style="color:${sc(c.category)}">The Signal</div>
+        <div class="sh-signal">${c.takeaway}</div>
+      </div>
+      <div class="sh-section">
+        <div class="sh-section-title">Context</div>
+        <div class="sh-text">${c.body}</div>
+      </div>
+      <div class="sh-section">
+        <div class="sh-section-title">Why It Matters</div>
+        <div class="impl-list">${c.implications.map(i=>`
+          <div class="impl-item"><div class="impl-icon">${i.icon}</div><div class="impl-text">${i.text}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="height:10px"></div>
+    </div>`
   document.getElementById('overlay').classList.add('open')
   document.getElementById('sheet').classList.add('open')
-  document.body.style.overflow = 'hidden'
+  document.body.style.overflow='hidden'
 }
-
 function closeSheet() {
   document.getElementById('overlay').classList.remove('open')
   document.getElementById('sheet').classList.remove('open')
-  document.body.style.overflow = ''
+  document.body.style.overflow=''
 }
-
-function openSrc() {
-  if (current && current.url) window.open(current.url, '_blank')
-}
+function openSrc() { if(current?.url) window.open(current.url,'_blank') }
 
 loadNews()
 </script>
