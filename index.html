@@ -36,25 +36,28 @@
   --r-sm: 10px;
   --safe-top: env(safe-area-inset-top, 44px);
   --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --nav-h: 64px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body {
+html { height: 100%; }
+
+body {
   background: var(--black);
   color: var(--text);
   font-family: 'Sora', sans-serif;
-  min-height: 100vh;
+  height: 100%;
   max-width: 430px;
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .header {
   background: var(--black);
-  padding: calc(var(--safe-top) + 12px) 20px 0;
+  padding: calc(var(--safe-top) + 10px) 20px 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -64,11 +67,11 @@ html, body {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .app-name {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -.8px;
 }
@@ -77,7 +80,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
 }
 
 .live-pill {
@@ -99,16 +102,11 @@ html, body {
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
-
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-.clock {
-  font-size: 12px;
-  color: var(--text-3);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
+.clock { font-size: 12px; color: var(--text-3); font-weight: 500; font-variant-numeric: tabular-nums; }
 
+/* ── MARKETS ── */
 .markets {
   display: flex;
   gap: 7px;
@@ -136,7 +134,7 @@ html, body {
 .up { color: var(--green); }
 .dn { color: var(--red); }
 
-/* FILTERS */
+/* ── FILTERS ── */
 .filters {
   background: var(--black);
   display: flex;
@@ -149,7 +147,7 @@ html, body {
 
 .ftab {
   flex-shrink: 0;
-  padding: 12px 14px 11px;
+  padding: 11px 14px 10px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-3);
@@ -163,9 +161,9 @@ html, body {
 }
 .ftab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
 
-/* FEED */
+/* ── FEED ── */
 .feed {
-  padding: 14px 14px calc(80px + var(--safe-bottom));
+  padding: 14px 14px calc(var(--nav-h) + var(--safe-bottom) + 14px);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -186,9 +184,20 @@ html, body {
   text-transform: uppercase;
 }
 
-.story-count { font-size: 11px; color: var(--text-3); }
+.refresh-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+}
+.refresh-btn:active { opacity: .7; }
 
-/* LOADING */
+/* ── LOADING ── */
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -199,44 +208,54 @@ html, body {
 }
 
 .spinner {
-  width: 28px; height: 28px;
+  width: 26px; height: 26px;
   border: 2px solid var(--border);
   border-top-color: var(--orange);
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 13px; color: var(--text-3); }
 
-.loading-text {
-  font-size: 13px;
-  color: var(--text-3);
-  font-weight: 400;
-}
-
-/* CARD */
+/* ── CARD ── */
 .card {
   background: var(--card);
   border-radius: var(--r);
-  padding: 16px 16px 14px;
+  overflow: hidden;
   cursor: pointer;
   transition: background .15s, transform .1s;
   border: 1px solid var(--border);
   animation: rise .3s ease both;
 }
+@keyframes rise { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.card:active { background: var(--card2); transform: scale(.985); }
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Card image */
+.card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: var(--card2);
 }
 
-.card:active { background: var(--card2); transform: scale(.985); }
+.card-img-placeholder {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(135deg, var(--card2) 0%, var(--border) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.card-body { padding: 14px 15px 13px; }
 
 .card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 11px;
+  margin-bottom: 10px;
 }
 
 .tag {
@@ -245,7 +264,6 @@ html, body {
   padding: 4px 9px;
   border-radius: 7px;
 }
-
 .t-markets { background: var(--orange-dim); color: var(--orange); }
 .t-ma      { background: var(--purple-dim); color: var(--purple); }
 .t-macro   { background: var(--red-dim);    color: var(--red); }
@@ -256,16 +274,15 @@ html, body {
 .card-time { font-size: 11px; color: var(--text-3); font-variant-numeric: tabular-nums; }
 
 .save-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 17px;
-  line-height: 1;
-  padding: 2px;
+  background: none; border: none; cursor: pointer;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
   color: var(--text-3);
   transition: color .15s;
+  border-radius: 50%;
 }
 .save-btn.saved { color: var(--amber); }
+.save-btn svg { width: 16px; height: 16px; }
 
 .card-headline {
   font-family: 'Fraunces', serif;
@@ -277,226 +294,196 @@ html, body {
   letter-spacing: -.2px;
 }
 
-.card-source { font-size: 11px; color: var(--text-3); margin-bottom: 12px; }
+.card-source { font-size: 11px; color: var(--text-3); margin-bottom: 11px; }
 
-.tw-box {
+/* THE SIGNAL */
+.signal-box {
   background: rgba(255,255,255,.04);
   border-radius: var(--r-sm);
   border-left: 2.5px solid var(--orange);
-  padding: 11px 13px;
-  margin-bottom: 13px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
 }
-
-.tw-label {
-  font-size: 9px;
-  font-weight: 700;
+.signal-label {
+  font-size: 9px; font-weight: 700;
   color: var(--orange);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 5px;
+  letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 4px;
 }
-
-.tw-text { font-size: 13px; line-height: 1.58; color: var(--text-2); }
+.signal-text { font-size: 13px; line-height: 1.55; color: var(--text-2); }
 
 .card-footer { display: flex; align-items: center; justify-content: space-between; }
 .card-dots { font-size: 11px; color: var(--border2); letter-spacing: 2px; }
-.dive-btn { font-size: 12px; font-weight: 600; color: var(--text-2); }
+.dive-btn { font-size: 12px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 4px; }
+.dive-btn svg { width: 13px; height: 13px; }
 
-/* SHEET */
+/* ── SHEET ── */
 .overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.7);
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 200;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
   transition: opacity .25s;
 }
 .overlay.open { opacity: 1; pointer-events: all; }
 
 .sheet {
   position: fixed;
-  bottom: 0;
-  left: 50%;
+  bottom: 0; left: 50%;
   transform: translate(-50%, 100%);
-  width: 100%;
-  max-width: 430px;
+  width: 100%; max-width: 430px;
   background: var(--bg);
   border-radius: 22px 22px 0 0;
   border-top: 1px solid var(--border);
   z-index: 201;
-  max-height: 88vh;
-  display: flex;
-  flex-direction: column;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
   transition: transform .32s cubic-bezier(.32,.72,0,1);
 }
 .sheet.open { transform: translate(-50%, 0); }
 
 .sheet-handle {
   width: 36px; height: 4px;
-  background: var(--border2);
-  border-radius: 2px;
-  margin: 12px auto 0;
+  background: var(--border2); border-radius: 2px;
+  margin: 12px auto 0; flex-shrink: 0;
+}
+
+.sheet-img {
+  width: 100%; height: 180px;
+  object-fit: cover;
   flex-shrink: 0;
 }
 
-.sheet-scroll {
-  overflow-y: auto;
-  flex: 1;
-  padding: 18px 20px 0;
-}
+.sheet-scroll { overflow-y: auto; flex: 1; padding: 18px 20px 0; }
 
-.sh-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.sh-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .sh-time { font-size: 11px; color: var(--text-3); margin-left: auto; }
 
 .sh-headline {
   font-family: 'Fraunces', serif;
-  font-size: 23px;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -.3px;
-  color: var(--text);
-  margin-bottom: 7px;
+  font-size: 22px; font-weight: 600;
+  line-height: 1.3; letter-spacing: -.3px;
+  color: var(--text); margin-bottom: 6px;
 }
 
 .sh-source {
-  font-size: 11.5px;
-  color: var(--text-3);
-  margin-bottom: 18px;
-  padding-bottom: 18px;
+  font-size: 11.5px; color: var(--text-3);
+  margin-bottom: 16px; padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
 }
 
-.sh-section { margin-bottom: 20px; }
-
+.sh-section { margin-bottom: 18px; }
 .sh-section-title {
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  margin-bottom: 10px;
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text-3); margin-bottom: 9px;
 }
 
-.sh-takeaway {
+.sh-signal {
   background: rgba(255,92,0,.07);
   border-left: 2.5px solid var(--orange);
   border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  padding: 13px 15px;
-  font-size: 14px;
-  line-height: 1.65;
+  padding: 12px 14px;
+  font-size: 14px; line-height: 1.65;
   color: #e0c8b8;
 }
 
 .sh-text { font-size: 14px; line-height: 1.78; color: var(--text-2); font-weight: 300; }
 
 .impl-list { display: flex; flex-direction: column; gap: 8px; }
-
 .impl-item {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  background: var(--card);
-  border-radius: var(--r-sm);
-  padding: 12px 13px;
-  border: 1px solid var(--border);
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--card); border-radius: var(--r-sm);
+  padding: 11px 12px; border: 1px solid var(--border);
 }
-
 .impl-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-.impl-text { font-size: 13px; line-height: 1.58; color: var(--text-2); font-weight: 300; }
+.impl-text { font-size: 13px; line-height: 1.55; color: var(--text-2); font-weight: 300; }
 
 .sh-footer {
-  padding: 14px 20px calc(14px + var(--safe-bottom));
+  padding: 12px 20px calc(12px + var(--safe-bottom));
   border-top: 1px solid var(--border);
-  display: flex;
-  gap: 10px;
-  flex-shrink: 0;
+  display: flex; gap: 10px; flex-shrink: 0;
   background: var(--bg);
 }
 
 .btn-back {
-  flex: 1;
-  padding: 13px;
+  flex: 1; padding: 13px;
   border-radius: var(--r-sm);
   border: 1px solid var(--border2);
-  background: none;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-2);
-  cursor: pointer;
+  background: none; font-size: 13px; font-weight: 600;
+  color: var(--text-2); cursor: pointer;
   font-family: 'Sora', sans-serif;
 }
 
 .btn-source {
-  flex: 2;
-  padding: 13px;
+  flex: 2; padding: 13px;
   border-radius: var(--r-sm);
-  border: none;
-  background: var(--text);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--black);
-  cursor: pointer;
+  border: none; background: var(--text);
+  font-size: 13px; font-weight: 700;
+  color: var(--black); cursor: pointer;
   font-family: 'Sora', sans-serif;
 }
 
-/* REFRESH BTN */
-.refresh-btn {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-2);
-  cursor: pointer;
-  font-family: 'Sora', sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.refresh-btn:active { opacity: .7; }
-
-/* NAV */
+/* ── NAV ── */
 .nav {
   position: fixed;
-  bottom: 0;
-  left: 50%;
+  bottom: 0; left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  background: rgba(13,13,13,.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  width: 100%; max-width: 430px;
+  background: rgba(10,10,10,.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
   display: flex;
-  padding: 10px 10px calc(10px + var(--safe-bottom));
+  padding: 0 30px;
+  padding-bottom: var(--safe-bottom);
+  height: calc(var(--nav-h) + var(--safe-bottom));
   z-index: 100;
-  gap: 4px;
+  align-items: flex-start;
+  padding-top: 10px;
 }
 
 .nav-item {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  padding: 6px 0;
-  border-radius: 12px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 5px;
+  cursor: pointer; padding: 4px 0;
+  border-radius: 10px;
+  transition: opacity .15s;
 }
 
-.nav-item.active { background: var(--card); }
-.nav-icon { font-size: 20px; line-height: 1; }
-.nav-label { font-size: 10px; font-weight: 500; color: var(--text-3); }
+.nav-item:active { opacity: .6; }
+
+.nav-icon-wrap {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.nav-icon-wrap svg {
+  width: 22px; height: 22px;
+  stroke: var(--text-3);
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke .15s;
+}
+
+.nav-item.active .nav-icon-wrap svg { stroke: var(--text); }
+
+.nav-label {
+  font-size: 10px; font-weight: 500;
+  color: var(--text-3);
+  transition: color .15s;
+}
 .nav-item.active .nav-label { color: var(--text); font-weight: 600; }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="header-row">
     <div class="app-name">Briefd</div>
@@ -505,15 +492,33 @@ html, body {
       <div class="clock" id="clock">--:-- HKT</div>
     </div>
   </div>
+
+  <!-- S&P500 · HSI · NIKKEI · GOLD -->
   <div class="markets" id="markets">
-    <div class="mpill"><span class="mpill-label">HSI</span><span class="mpill-val mpill-chg up">loading</span></div>
-    <div class="mpill"><span class="mpill-label">USD/HKD</span><span class="mpill-val">7.783</span></div>
-    <div class="mpill"><span class="mpill-label">CNH</span><span class="mpill-val">7.241</span></div>
-    <div class="mpill"><span class="mpill-label">GOLD</span><span class="mpill-val up">$2,918</span></div>
-    <div class="mpill"><span class="mpill-label">NIKKEI</span><span class="mpill-val dn">37,120</span></div>
+    <div class="mpill">
+      <span class="mpill-label">S&P 500</span>
+      <span class="mpill-val" id="spx-val">–</span>
+      <span class="mpill-chg" id="spx-chg">–</span>
+    </div>
+    <div class="mpill">
+      <span class="mpill-label">HSI</span>
+      <span class="mpill-val" id="hsi-val">–</span>
+      <span class="mpill-chg" id="hsi-chg">–</span>
+    </div>
+    <div class="mpill">
+      <span class="mpill-label">Nikkei</span>
+      <span class="mpill-val" id="nk-val">–</span>
+      <span class="mpill-chg" id="nk-chg">–</span>
+    </div>
+    <div class="mpill">
+      <span class="mpill-label">Gold</span>
+      <span class="mpill-val" id="gold-val">–</span>
+      <span class="mpill-chg" id="gold-chg">–</span>
+    </div>
   </div>
 </div>
 
+<!-- FILTERS -->
 <div class="filters">
   <button class="ftab active" onclick="setFilter('all',this)">All</button>
   <button class="ftab" onclick="setFilter('markets',this)">Markets</button>
@@ -523,6 +528,7 @@ html, body {
   <button class="ftab" onclick="setFilter('hk',this)">HK Focus</button>
 </div>
 
+<!-- FEED -->
 <div class="feed" id="feed">
   <div class="date-row">
     <div class="date-label" id="dateLabel">Loading...</div>
@@ -534,6 +540,7 @@ html, body {
   </div>
 </div>
 
+<!-- SHEET -->
 <div class="overlay" id="overlay" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
@@ -544,18 +551,34 @@ html, body {
   </div>
 </div>
 
-<div class="nav">
-  <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Feed</div></div>
-  <div class="nav-item" onclick="showSaved()"><div class="nav-icon">🔖</div><div class="nav-label">Saved</div></div>
-  <div class="nav-item"><div class="nav-icon">✦</div><div class="nav-label">AI Brief</div></div>
-</div>
+<!-- NAV — 2 tabs, SVG icons -->
+<nav class="nav">
+  <div class="nav-item active" id="nav-feed" onclick="switchTab('feed')">
+    <div class="nav-icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="nav-label">Feed</span>
+  </div>
+  <div class="nav-item" id="nav-saved" onclick="switchTab('saved')">
+    <div class="nav-icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+      </svg>
+    </div>
+    <span class="nav-label">Saved</span>
+  </div>
+</nav>
 
 <script>
 const TC = { markets:'t-markets', ma:'t-ma', macro:'t-macro', tech:'t-tech', hk:'t-hk' }
-const CACHE_KEY = 'briefd_v1'
-const CACHE_TTL = 3 * 60 * 60 * 1000 // 3 hours
+const TAG_EMOJI = { markets:'📈', ma:'🤝', macro:'🌍', tech:'💡', hk:'🏙️' }
+const CACHE_KEY = 'briefd_v2'
+const CACHE_TTL = 3 * 60 * 60 * 1000
 
-let NEWS = [], filter = 'all', saved = new Set(), current = null
+let NEWS = [], ALL_NEWS = [], filter = 'all', saved = new Set(), current = null, activeTab = 'feed'
 
 // ── CLOCK ──
 function updateClock() {
@@ -563,8 +586,7 @@ function updateClock() {
   document.getElementById('clock').textContent =
     String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ' HKT'
 }
-updateClock()
-setInterval(updateClock, 30000)
+updateClock(); setInterval(updateClock, 30000)
 
 // ── DATE ──
 function updateDate() {
@@ -575,21 +597,49 @@ function updateDate() {
 }
 updateDate()
 
+// ── MARKETS (static for now, realistic values) ──
+function loadMarkets() {
+  // Static snapshot — realistic as of early March 2026
+  const mkts = [
+    { id: 'spx', val: '5,771', chg: '+0.4%', up: true },
+    { id: 'hsi', val: '19,842', chg: '+1.2%', up: true },
+    { id: 'nk',  val: '37,120', chg: '−0.6%', up: false },
+    { id: 'gold',val: '$2,918', chg: '+0.7%', up: true },
+  ]
+  mkts.forEach(m => {
+    document.getElementById(m.id+'-val').textContent = m.val
+    const el = document.getElementById(m.id+'-chg')
+    el.textContent = m.chg
+    el.className = 'mpill-chg ' + (m.up ? 'up' : 'dn')
+  })
+}
+loadMarkets()
+
+// ── IMAGE ──
+function getImageUrl(headline, category) {
+  const queries = {
+    markets: 'stock market finance charts',
+    ma: 'business deal merger handshake',
+    macro: 'global economy world map',
+    tech: 'technology innovation digital',
+    hk: 'hong kong skyline city'
+  }
+  const q = encodeURIComponent((queries[category] || 'business news') + ' ' + headline.split(' ').slice(0,4).join(' '))
+  return `https://image.pollinations.ai/prompt/${q}?width=600&height=300&nologo=true&seed=${Math.abs(headline.split('').reduce((a,c)=>a+c.charCodeAt(0),0))}`
+}
+
 // ── FETCH NEWS ──
 async function fetchNews() {
-  // Check cache
   const cached = localStorage.getItem(CACHE_KEY)
   if (cached) {
-    const { data, timestamp } = JSON.parse(cached)
-    if (Date.now() - timestamp < CACHE_TTL) {
-      return data
-    }
+    try {
+      const { data, timestamp } = JSON.parse(cached)
+      if (Date.now() - timestamp < CACHE_TTL) return data
+    } catch(e) {}
   }
-
   const res = await fetch('/api/news', { method: 'POST' })
   if (!res.ok) throw new Error('Server error: ' + res.status)
   const data = await res.json()
-
   localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }))
   return data
 }
@@ -598,9 +648,10 @@ async function loadNews() {
   document.getElementById('loadingState').style.display = 'flex'
   try {
     const data = await fetchNews()
-    NEWS = data.stories
+    ALL_NEWS = data.stories
+    NEWS = ALL_NEWS
     renderFeed()
-  } catch (err) {
+  } catch(err) {
     document.getElementById('loadingState').innerHTML = `
       <div style="font-size:13px;color:var(--red);text-align:center;line-height:1.6">
         Error loading news<br>
@@ -611,50 +662,67 @@ async function loadNews() {
 
 async function forceRefresh() {
   localStorage.removeItem(CACHE_KEY)
-  NEWS = []
+  NEWS = []; ALL_NEWS = []
   document.getElementById('loadingState').style.display = 'flex'
   document.getElementById('loadingState').innerHTML = '<div class="spinner"></div><div class="loading-text">Refreshing brief...</div>'
-  // Remove old cards
-  const feed = document.getElementById('feed')
-  feed.querySelectorAll('.card').forEach(c => c.remove())
+  document.getElementById('feed').querySelectorAll('.card').forEach(c => c.remove())
   await loadNews()
 }
 
 // ── RENDER ──
 function tc(cat) { return TC[cat] || TC[(cat||'').toLowerCase()] || 't-hk' }
+function emoji(cat) { return TAG_EMOJI[cat] || TAG_EMOJI[(cat||'').toLowerCase()] || '📰' }
 
 function renderFeed() {
   const feed = document.getElementById('feed')
   feed.querySelectorAll('.card').forEach(c => c.remove())
   document.getElementById('loadingState').style.display = 'none'
 
-  const items = filter === 'all' ? NEWS : NEWS.filter(n => n.category === filter)
-  
-  // Update story count in date row
-  const refreshBtn = document.getElementById('refreshBtn')
-  refreshBtn.textContent = '↻ ' + items.length + ' stor' + (items.length === 1 ? 'y' : 'ies')
+  const src = activeTab === 'saved' ? ALL_NEWS.filter(n => saved.has(n.id)) : ALL_NEWS
+  const items = filter === 'all' ? src : src.filter(n => n.category === filter)
+
+  document.getElementById('refreshBtn').textContent = '↻ ' + items.length + ' stor' + (items.length === 1 ? 'y' : 'ies')
+
+  if (items.length === 0 && activeTab === 'saved') {
+    const empty = document.createElement('div')
+    empty.style = 'text-align:center;padding:50px 20px;font-size:13px;color:var(--text-3)'
+    empty.textContent = 'No saved stories yet'
+    feed.appendChild(empty)
+    return
+  }
 
   items.forEach((item, i) => {
+    const imgUrl = getImageUrl(item.headline, item.category)
     const c = document.createElement('div')
     c.className = 'card'
-    c.style.animationDelay = (i * 0.06) + 's'
+    c.style.animationDelay = (i * 0.05) + 's'
     c.innerHTML = `
-      <div class="card-top">
-        <span class="tag ${tc(item.category)}">${item.shortTag}</span>
-        <div class="card-top-right">
-          <span class="card-time">${item.time}</span>
-          <button class="save-btn ${saved.has(item.id) ? 'saved' : ''}" onclick="sv(event,${item.id})">${saved.has(item.id) ? '★' : '☆'}</button>
+      <img class="card-img" src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="card-img-placeholder" style="display:none">${emoji(item.category)}</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="tag ${tc(item.category)}">${item.shortTag}</span>
+          <div class="card-top-right">
+            <span class="card-time">${item.time}</span>
+            <button class="save-btn ${saved.has(item.id) ? 'saved' : ''}" onclick="sv(event,${item.id})">
+              <svg viewBox="0 0 24 24" fill="${saved.has(item.id) ? 'var(--amber)' : 'none'}" stroke="${saved.has(item.id) ? 'var(--amber)' : 'currentColor'}">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="card-headline">${item.headline}</div>
-      <div class="card-source">${item.source}</div>
-      <div class="tw-box">
-        <div class="tw-label">Key Takeaway</div>
-        <div class="tw-text">${item.takeaway}</div>
-      </div>
-      <div class="card-footer">
-        <span class="card-dots">· · ·</span>
-        <div class="dive-btn">Deep dive →</div>
+        <div class="card-headline">${item.headline}</div>
+        <div class="card-source">${item.source}</div>
+        <div class="signal-box">
+          <div class="signal-label">The Signal</div>
+          <div class="signal-text">${item.takeaway}</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-dots">· · ·</span>
+          <div class="dive-btn">Deep dive
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
       </div>`
     c.addEventListener('click', e => { if (!e.target.closest('.save-btn')) openSheet(item.id) })
     feed.appendChild(c)
@@ -665,7 +733,7 @@ function setFilter(cat, btn) {
   filter = cat
   document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'))
   btn.classList.add('active')
-  if (NEWS.length) renderFeed()
+  if (ALL_NEWS.length) renderFeed()
 }
 
 function sv(e, id) {
@@ -674,22 +742,22 @@ function sv(e, id) {
   renderFeed()
 }
 
-function showSaved() {
-  // Toggle saved filter
-  const btn = document.querySelector('.ftab.active')
-  NEWS_SAVED = NEWS.filter(n => saved.has(n.id))
-  if (NEWS_SAVED.length === 0) return
-  const tmp = NEWS
-  NEWS = NEWS_SAVED
-  renderFeed()
-  NEWS = tmp
+// ── TABS ──
+function switchTab(tab) {
+  activeTab = tab
+  document.getElementById('nav-feed').classList.toggle('active', tab === 'feed')
+  document.getElementById('nav-saved').classList.toggle('active', tab === 'saved')
+  if (ALL_NEWS.length) renderFeed()
 }
 
 // ── SHEET ──
 function openSheet(id) {
-  current = NEWS.find(n => n.id === id)
+  const src = ALL_NEWS
+  current = src.find(n => n.id === id)
   const c = current
+  const imgUrl = getImageUrl(c.headline, c.category)
   document.getElementById('sheetContent').innerHTML = `
+    <img class="sheet-img" src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
     <div class="sh-tag-row">
       <span class="tag ${tc(c.category)}">${c.shortTag}</span>
       <span class="sh-time">${c.time} HKT · ${c.source}</span>
@@ -697,8 +765,8 @@ function openSheet(id) {
     <div class="sh-headline">${c.headline}</div>
     <div class="sh-source">${c.source}</div>
     <div class="sh-section">
-      <div class="sh-section-title">Key Takeaway</div>
-      <div class="sh-takeaway">${c.takeaway}</div>
+      <div class="sh-section-title">The Signal</div>
+      <div class="sh-signal">${c.takeaway}</div>
     </div>
     <div class="sh-section">
       <div class="sh-section-title">Context</div>
@@ -713,7 +781,7 @@ function openSheet(id) {
         </div>`).join('')}
       </div>
     </div>
-    <div style="height:6px"></div>`
+    <div style="height:8px"></div>`
   document.getElementById('overlay').classList.add('open')
   document.getElementById('sheet').classList.add('open')
   document.body.style.overflow = 'hidden'
@@ -729,7 +797,6 @@ function openSrc() {
   if (current && current.url) window.open(current.url, '_blank')
 }
 
-// ── INIT ──
 loadNews()
 </script>
 </body>
