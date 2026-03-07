@@ -1,8 +1,13 @@
 {
   "version": 2,
+  "functions": {
+    "news.js": {
+      "runtime": "@vercel/node@3.0.0"
+    }
+  },
   "routes": [
     { "src": "/api/news", "dest": "/news.js" },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/manifest.json", "dest": "/manifest.json" }
+    { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
