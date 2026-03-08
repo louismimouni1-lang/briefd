@@ -33,6 +33,8 @@
   --amber-dim: rgba(251,191,36,.1);
   --blue: #60a5fa;
   --blue-dim: rgba(96,165,250,.1);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,.1);
   --r: 16px;
   --r-sm: 10px;
   --safe-top: env(safe-area-inset-top, 44px);
@@ -41,19 +43,9 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { height:100%; }
-body {
-  background:var(--black); color:var(--text);
-  font-family:'Sora',sans-serif; height:100%;
-  max-width:430px; margin:0 auto;
-  -webkit-font-smoothing:antialiased; overflow-x:hidden;
-}
+body { background:var(--black); color:var(--text); font-family:'Sora',sans-serif; height:100%; max-width:430px; margin:0 auto; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
 
-/* ── HEADER ── */
-.header {
-  background:var(--black);
-  padding:calc(var(--safe-top) + 10px) 20px 0;
-  position:sticky; top:0; z-index:100;
-}
+.header { background:var(--black); padding:calc(var(--safe-top) + 10px) 20px 0; position:sticky; top:0; z-index:100; }
 .header-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:14px; }
 .app-name { font-size:22px; font-weight:700; letter-spacing:-.5px; }
 .app-name span { color:var(--text-3); font-weight:400; }
@@ -63,7 +55,6 @@ body {
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 .clock { font-size:12px; color:var(--text-3); font-weight:500; font-variant-numeric:tabular-nums; }
 
-/* ── MARKETS ── */
 .markets { display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding-bottom:14px; border-bottom:1px solid var(--border); }
 .markets::-webkit-scrollbar { display:none; }
 .mpill { flex-shrink:0; background:var(--card); border-radius:20px; padding:6px 12px; display:flex; align-items:center; gap:7px; border:1px solid var(--border); }
@@ -72,101 +63,58 @@ body {
 .mpill-chg { font-size:10.5px; font-weight:600; font-variant-numeric:tabular-nums; }
 .up { color:var(--green); } .dn { color:var(--red); }
 
-/* ── FILTERS ── */
 .filters { background:var(--black); display:flex; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--border); padding:0 20px; }
 .filters::-webkit-scrollbar { display:none; }
 .ftab { flex-shrink:0; padding:11px 14px 10px; font-size:13px; font-weight:500; color:var(--text-3); background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap; font-family:'Sora',sans-serif; transition:color .15s,border-color .15s; }
 .ftab.active { color:var(--text); border-bottom-color:var(--text); font-weight:600; }
 
-/* ── FEED ── */
 .feed { padding:16px 14px calc(var(--nav-h) + var(--safe-bottom) + 16px); display:flex; flex-direction:column; gap:12px; }
 .date-row { display:flex; align-items:center; justify-content:space-between; padding:2px 4px 4px; }
 .date-label { font-size:11px; font-weight:600; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; }
 .refresh-btn { background:var(--card); border:1px solid var(--border2); border-radius:20px; padding:5px 12px; font-size:11px; font-weight:600; color:var(--text-3); cursor:pointer; font-family:'Sora',sans-serif; }
 .refresh-btn:active { opacity:.7; }
 
-/* ── LOADING ── */
 .loading-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px; }
 .spinner { width:26px; height:26px; border:2px solid var(--border2); border-top-color:var(--orange); border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg)} }
-.loading-text { font-size:13px; color:var(--text-3); text-align:center; line-height:1.6; }
+.loading-text { font-size:13px; color:var(--text-3); text-align:center; line-height:1.7; }
 
-/* ── NARRATIVE BLOCK ── */
-.narrative-block {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  overflow:hidden;
-  animation:rise .3s ease both;
-}
+/* ── NARRATIVE ── */
+.narrative-block { background:var(--card); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; animation:rise .3s ease both; }
 @keyframes rise { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
-.narrative-header {
-  background:var(--card-top);
-  border-bottom:1px solid var(--border);
-  padding:14px 16px 13px;
-  display:flex; align-items:center; gap:10px;
-}
-.narrative-eyebrow {
-  font-size:9px; font-weight:700; letter-spacing:.15em;
-  text-transform:uppercase; color:var(--orange);
-}
-.narrative-header-right { margin-left:auto; font-size:11px; color:var(--text-3); }
-
+.narrative-header { background:var(--card-top); border-bottom:1px solid var(--border); padding:13px 16px; display:flex; align-items:center; justify-content:space-between; }
+.narrative-eyebrow { font-size:9px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--orange); }
+.narrative-time { font-size:11px; color:var(--text-3); }
 .narrative-body { padding:16px; }
-.narrative-title {
-  font-family:'Fraunces',serif;
-  font-size:20px; font-weight:600;
-  line-height:1.28; letter-spacing:-.3px;
-  color:var(--text); margin-bottom:12px;
-}
-.narrative-text {
-  font-size:14px; line-height:1.8;
-  color:var(--text-2); font-weight:300;
-}
+.narrative-title { font-family:'Fraunces',serif; font-size:19px; font-weight:600; line-height:1.3; letter-spacing:-.3px; color:var(--text); margin-bottom:11px; }
+.narrative-text { font-size:13.5px; line-height:1.8; color:var(--text-2); font-weight:300; }
 .narrative-text strong { color:var(--text); font-weight:500; }
 
 /* ── CARD style C ── */
-.card {
-  background:var(--card); border-radius:var(--r);
-  overflow:hidden; cursor:pointer;
-  border:1px solid var(--border);
-  animation:rise .3s ease both;
-  transition:opacity .15s,transform .1s;
-}
+.card { background:var(--card); border-radius:var(--r); overflow:hidden; cursor:pointer; border:1px solid var(--border); animation:rise .3s ease both; transition:opacity .15s,transform .1s; }
 .card:active { opacity:.75; transform:scale(.98); }
-
 .card-top-section { background:var(--card-top); border-bottom:1px solid var(--border); padding:14px 16px 13px; }
 .card-top-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
 .card-top-right { display:flex; align-items:center; gap:8px; }
 .card-time { font-size:11px; color:var(--text-3); font-variant-numeric:tabular-nums; }
 .save-btn { background:none; border:none; cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
 .save-btn svg { width:15px; height:15px; }
-
 .card-headline { font-family:'Fraunces',serif; font-size:17px; font-weight:600; line-height:1.32; color:var(--text); letter-spacing:-.2px; }
 .card-bottom { padding:13px 16px 14px; }
 .card-source { font-size:11px; color:var(--text-3); margin-bottom:10px; }
 
-/* TAGS */
+/* TAGS — 5 WM categories */
 .tag { font-size:10px; font-weight:700; padding:4px 9px; border-radius:7px; letter-spacing:.02em; }
-.t-pms        { background:var(--blue-dim);   color:var(--blue); }
-.t-regulation { background:var(--amber-dim);  color:var(--amber); }
-.t-ma         { background:var(--purple-dim); color:var(--purple); }
-.t-macro      { background:var(--red-dim);    color:var(--red); }
-.t-strategy   { background:var(--green-dim);  color:var(--green); }
+.t-privatebanking { background:var(--blue-dim);   color:var(--blue); }
+.t-wealthtech     { background:var(--green-dim);  color:var(--green); }
+.t-regulation     { background:var(--amber-dim);  color:var(--amber); }
+.t-macro          { background:var(--red-dim);    color:var(--red); }
+.t-ma             { background:var(--purple-dim); color:var(--purple); }
 
-/* SIGNAL */
 .signal-label { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px; }
 .signal-text { font-size:13px; line-height:1.6; color:var(--text-2); }
 
-/* CONSULTING ANGLE */
-.angle-box {
-  margin-top:11px;
-  background:rgba(255,92,0,.06);
-  border-left:2px solid var(--orange);
-  border-radius:0 var(--r-sm) var(--r-sm) 0;
-  padding:9px 12px;
-}
+.angle-box { margin-top:11px; background:rgba(255,92,0,.06); border-left:2px solid var(--orange); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:9px 12px; }
 .angle-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--orange); margin-bottom:4px; }
 .angle-text { font-size:12px; line-height:1.6; color:#c0a090; }
 
@@ -181,8 +129,7 @@ body {
 .sheet { position:fixed; bottom:0; left:50%; transform:translate(-50%,100%); width:100%; max-width:430px; background:var(--bg); border-radius:22px 22px 0 0; border-top:1px solid var(--border); z-index:201; max-height:92vh; display:flex; flex-direction:column; transition:transform .32s cubic-bezier(.32,.72,0,1); }
 .sheet.open { transform:translate(-50%,0); }
 .sheet-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:12px auto 0; flex-shrink:0; }
-.sheet-scroll { overflow-y:auto; flex:1; padding:0 20px 0; }
-
+.sheet-scroll { overflow-y:auto; flex:1; padding:0 20px; }
 .sh-top-section { background:var(--card-top); border-bottom:1px solid var(--border); padding:18px 0 16px; margin:16px -20px 0; padding-left:20px; padding-right:20px; }
 .sh-tag-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
 .sh-time { font-size:11px; color:var(--text-3); margin-left:auto; }
@@ -198,7 +145,6 @@ body {
 .impl-item { display:flex; gap:12px; align-items:flex-start; background:var(--card); border-radius:var(--r-sm); padding:11px 12px; border:1px solid var(--border); }
 .impl-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
 .impl-text { font-size:13px; line-height:1.55; color:var(--text-2); font-weight:300; }
-
 .sh-footer { padding:12px 20px calc(12px + var(--safe-bottom)); border-top:1px solid var(--border); display:flex; gap:10px; flex-shrink:0; background:var(--bg); }
 .btn-back { flex:1; padding:13px; border-radius:var(--r-sm); border:1px solid var(--border2); background:none; font-size:13px; font-weight:600; color:var(--text-2); cursor:pointer; font-family:'Sora',sans-serif; }
 .btn-source { flex:2; padding:13px; border-radius:var(--r-sm); border:none; background:var(--text); font-size:13px; font-weight:700; color:#000; cursor:pointer; font-family:'Sora',sans-serif; }
@@ -234,11 +180,11 @@ body {
 
 <div class="filters">
   <button class="ftab active" onclick="setFilter('all',this)">All</button>
-  <button class="ftab" onclick="setFilter('pms',this)">PMS & Tech</button>
+  <button class="ftab" onclick="setFilter('privatebanking',this)">Private Banking</button>
+  <button class="ftab" onclick="setFilter('wealthtech',this)">Wealth Tech</button>
   <button class="ftab" onclick="setFilter('regulation',this)">Regulation</button>
-  <button class="ftab" onclick="setFilter('ma',this)">M&A</button>
   <button class="ftab" onclick="setFilter('macro',this)">Macro</button>
-  <button class="ftab" onclick="setFilter('strategy',this)">Strategy</button>
+  <button class="ftab" onclick="setFilter('ma',this)">M&A</button>
 </div>
 
 <div class="feed" id="feed">
@@ -248,7 +194,7 @@ body {
   </div>
   <div class="loading-state" id="loadingState">
     <div class="spinner"></div>
-    <div class="loading-text">Preparing your brief...<br><span style="font-size:11px;color:var(--text-3)">Searching latest WM news</span></div>
+    <div class="loading-text">Preparing your WM brief...<br><span style="font-size:11px">Searching latest news</span></div>
   </div>
 </div>
 
@@ -278,9 +224,9 @@ body {
 </nav>
 
 <script>
-const TC = { pms:'t-pms', regulation:'t-regulation', ma:'t-ma', macro:'t-macro', strategy:'t-strategy' }
-const SC = { pms:'var(--blue)', regulation:'var(--amber)', ma:'var(--purple)', macro:'var(--red)', strategy:'var(--green)' }
-const CACHE_KEY = 'wmbriefed_v1'
+const TC = { privatebanking:'t-privatebanking', wealthtech:'t-wealthtech', regulation:'t-regulation', macro:'t-macro', ma:'t-ma' }
+const SC = { privatebanking:'var(--blue)', wealthtech:'var(--green)', regulation:'var(--amber)', macro:'var(--red)', ma:'var(--purple)' }
+const CACHE_KEY = 'wmbriefed_v2'
 const CACHE_TTL = 3 * 60 * 60 * 1000
 let ALL_NEWS = [], NARRATIVE = null, filter = 'all', saved = new Set(), current = null, activeTab = 'feed'
 
@@ -329,44 +275,41 @@ async function loadNews() {
 }
 
 async function forceRefresh() {
-  localStorage.removeItem(CACHE_KEY); ALL_NEWS = []; NARRATIVE = null
-  const ls = document.getElementById('loadingState')
+  localStorage.removeItem(CACHE_KEY); ALL_NEWS=[]; NARRATIVE=null
+  const ls=document.getElementById('loadingState')
   ls.style.display='flex'
-  ls.innerHTML='<div class="spinner"></div><div class="loading-text">Refreshing brief...<br><span style="font-size:11px;color:var(--text-3)">Searching latest WM news</span></div>'
+  ls.innerHTML='<div class="spinner"></div><div class="loading-text">Refreshing WM brief...<br><span style="font-size:11px">Searching latest news</span></div>'
   document.getElementById('feed').querySelectorAll('.card,.narrative-block').forEach(c=>c.remove())
   await loadNews()
 }
 
-function tc(cat) { return TC[cat]||TC[(cat||'').toLowerCase()]||'t-strategy' }
-function sc(cat) { return SC[cat]||SC[(cat||'').toLowerCase()]||'var(--green)' }
+function tc(cat) { return TC[cat]||TC[(cat||'').toLowerCase()]||'t-privatebanking' }
+function sc(cat) { return SC[cat]||SC[(cat||'').toLowerCase()]||'var(--blue)' }
 
 function renderFeed() {
-  const feed = document.getElementById('feed')
+  const feed=document.getElementById('feed')
   feed.querySelectorAll('.card,.narrative-block').forEach(c=>c.remove())
   document.getElementById('loadingState').style.display='none'
 
   const src = activeTab==='saved' ? ALL_NEWS.filter(n=>saved.has(n.id)) : ALL_NEWS
   const items = filter==='all' ? src : src.filter(n=>n.category===filter)
-
   document.getElementById('refreshBtn').textContent = '↻ '+items.length+' signal'+(items.length===1?'':'s')
 
-  // Narrative block — only in All + feed tab
   if (NARRATIVE && filter==='all' && activeTab==='feed') {
-    const nb = document.createElement('div')
-    nb.className = 'narrative-block'
-    nb.innerHTML = `
+    const nb=document.createElement('div')
+    nb.className='narrative-block'
+    const d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Hong_Kong'}))
+    const t=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' HKT'
+    nb.innerHTML=`
       <div class="narrative-header">
         <div class="narrative-eyebrow">Morning Brief</div>
-        <div class="narrative-header-right" id="narrativeTime"></div>
+        <div class="narrative-time">${t}</div>
       </div>
       <div class="narrative-body">
         <div class="narrative-title">${NARRATIVE.title}</div>
         <div class="narrative-text">${NARRATIVE.body.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
       </div>`
     feed.appendChild(nb)
-    // Set time
-    const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Hong_Kong'}))
-    document.getElementById('narrativeTime').textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' HKT'
   }
 
   if (items.length===0 && activeTab==='saved') {
@@ -376,12 +319,12 @@ function renderFeed() {
   }
 
   items.forEach((item,i) => {
-    const isSaved = saved.has(item.id)
-    const signal = item.signal || item.takeaway || ''
-    const angle = item.consulting_angle || ''
-    const c = document.createElement('div')
+    const isSaved=saved.has(item.id)
+    const signal=item.signal||item.takeaway||''
+    const angle=item.consulting_angle||''
+    const c=document.createElement('div')
     c.className='card'
-    c.style.animationDelay = ((NARRATIVE && filter==='all' ? 0.1 : 0) + i*0.06)+'s'
+    c.style.animationDelay=((NARRATIVE&&filter==='all'?0.1:0)+i*0.06)+'s'
     c.innerHTML=`
       <div class="card-top-section">
         <div class="card-top-row">
@@ -401,7 +344,7 @@ function renderFeed() {
         <div class="card-source">${item.source}</div>
         <div class="signal-label" style="color:${sc(item.category)}">The Signal</div>
         <div class="signal-text">${signal}</div>
-        ${angle ? `<div class="angle-box"><div class="angle-label">Consulting Angle</div><div class="angle-text">${angle}</div></div>` : ''}
+        ${angle?`<div class="angle-box"><div class="angle-label">Consulting Angle</div><div class="angle-text">${angle}</div></div>`:''}
         <div class="card-footer">
           <span class="card-dots">· · ·</span>
           <div class="dive-btn">Deep dive <svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -413,9 +356,7 @@ function renderFeed() {
 }
 
 function setFilter(cat,btn) {
-  filter=cat
-  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'))
-  btn.classList.add('active')
+  filter=cat; document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active')); btn.classList.add('active')
   if(ALL_NEWS.length) renderFeed()
 }
 function sv(e,id) { e.stopPropagation(); saved.has(id)?saved.delete(id):saved.add(id); renderFeed() }
@@ -428,8 +369,8 @@ function switchTab(tab) {
 
 function openSheet(id) {
   current=ALL_NEWS.find(n=>n.id===id); const c=current
-  const signal = c.signal || c.takeaway || ''
-  const angle = c.consulting_angle || ''
+  const signal=c.signal||c.takeaway||''
+  const angle=c.consulting_angle||''
   document.getElementById('sheetContent').innerHTML=`
     <div class="sh-top-section">
       <div class="sh-tag-row">
@@ -444,7 +385,7 @@ function openSheet(id) {
         <div class="sh-section-title" style="color:${sc(c.category)}">The Signal</div>
         <div class="sh-signal">${signal}</div>
       </div>
-      ${angle ? `<div class="sh-section"><div class="sh-section-title" style="color:var(--orange)">Consulting Angle</div><div class="sh-angle">${angle}</div></div>` : ''}
+      ${angle?`<div class="sh-section"><div class="sh-section-title" style="color:var(--orange)">Consulting Angle</div><div class="sh-angle">${angle}</div></div>`:''}
       <div class="sh-section">
         <div class="sh-section-title">Context</div>
         <div class="sh-text">${c.body}</div>
