@@ -87,13 +87,13 @@ Rules:
         'anthropic-beta': 'web-search-2025-03-05'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6-20250514',
-        max_tokens: 5000,
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4000,
         system,
         tools: [{
           type: 'web_search_20250305',
           name: 'web_search',
-          max_uses: 8
+          max_uses: 3
         }],
         messages: [{ role: 'user', content: prompt }]
       })
