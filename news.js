@@ -18,9 +18,9 @@ export default async function handler(req, res) {
 
 CRITICAL: You only cover private banking and wealth management. You NEVER include generic stock market news, general tech news, or broad macro headlines. Every story must be directly useful to a management consultant advising private banks.`
 
-  const prompt = `Today is ${today}. Prepare the morning brief for Louis.
+  const prompt = `Today is ${today}. Prepare the executive summary.
 
-ABOUT LOUIS: Management consultant advising private banks and wealth managers in Asia — HSBC Private Banking, UBS WM, Julius Baer, Standard Chartered PB, DBS Private Bank, Bank of Singapore, Pictet, Lombard Odier, BNP Paribas WM. His work covers: PMS/technology platform selection (Avaloq, Temenos, InvestCloud, Objectway, additiv), operating model transformation, outsourcing, front office digitisation, regulatory compliance, WM business model review. Based in Hong Kong, covers Greater China, SEA, and global WM.
+THE READER: A management consultant advising private banks and wealth managers in Asia — HSBC Private Banking, UBS WM, Julius Baer, Standard Chartered PB, DBS Private Bank, Bank of Singapore, Pictet, Lombard Odier, BNP Paribas WM. Focus areas: PMS/technology platform selection (Avaloq, Temenos, InvestCloud, Objectway, additiv), operating model transformation, outsourcing, front office digitisation, regulatory compliance, WM business model review. Based in Hong Kong, covers Greater China, SEA, and global WM.
 
 SEARCH FOR NEWS using these queries (search each one):
 1. site:asianprivatebanker.com OR site:citywireasia.com OR site:wealthbriefingasia.com
@@ -38,14 +38,23 @@ HARD EXCLUSIONS — do NOT include stories about:
 - General M&A (e.g. PE buyouts) unless it involves a wealth manager, EAM, or WM tech vendor
 - Geopolitics or trade wars unless a specific private bank has issued guidance to HNW clients about it
 
-QUALITY TEST: Before including any story, ask: "Would Louis open a client meeting at Julius Baer or HSBC Private Banking by mentioning this?" If no, exclude it.
+CATEGORY DEFINITIONS — assign each story to the single best-fit category:
+- privatebanking: Private banks as institutions — hires, strategy, AUM, client segments, geographic expansion. E.g. "UBS WM hires new Asia CEO", "DBS PB AUM hits record".
+- wealthtech: Technology platforms, digital tools, vendors serving WMs — Avaloq, Temenos, InvestCloud, Objectway, additiv, FNZ, AI in WM. E.g. "Avaloq wins StanChart mandate", "Temenos launches AI portfolio tool".
+- regulation: Regulators (HKMA, SFC, MAS, FINMA, FCA) and compliance changes — suitability, KYC/AML, cross-border, licensing. E.g. "MAS tightens family office rules", "HKMA updates suitability guidance".
+- macro: Macroeconomic shifts with DIRECT impact on private bank business — rate decisions affecting AUM flows, currency moves impacting cross-border booking. NOT general market commentary. E.g. "Fed rate hold shifts Asia PB fixed income allocations".
+- ma: Mergers, acquisitions, partnerships involving wealth managers, private banks, EAMs, or WM tech vendors. E.g. "Julius Baer explores Singapore EAM acquisition", "FNZ acquires wealth platform".
 
-Generate exactly 1 narrative and 4 stories. Respond ONLY with valid JSON, no markdown:
+VALIDATION: After assigning a category, re-read the story and confirm it is the strongest fit. Correct if needed.
+
+QUALITY TEST: "Would a WM consultant open a client meeting at Julius Baer or HSBC Private Banking by mentioning this?" If no, exclude it.
+
+Generate exactly 1 narrative and 4 stories. Assign the most appropriate category to each story based on its content — it is OK to have multiple stories in the same category if that is where the news is. Do NOT force a story into a wrong category. Respond ONLY with valid JSON, no markdown:
 {
   "generated": "${new Date().toISOString()}",
   "narrative": {
     "title": "Punchy title summarising today's dominant WM theme (max 8 words)",
-    "body": "3-4 sentences written directly to Louis in second person. What is the dominant narrative this morning for the private banking world? Connect the dots between stories. What should he think about walking into client meetings? Sharp and strategic, not a news summary."
+    "body": "3-4 sentences in second person. Be direct and analytical. What is the dominant narrative this morning for the private banking world? Connect the dots between the stories below. What should the reader be thinking about walking into client meetings today? Sharp, opinionated, strategic — not a news summary."
   },
   "stories": [
     {
@@ -57,9 +66,9 @@ Generate exactly 1 narrative and 4 stories. Respond ONLY with valid JSON, no mar
       "time": "08:30",
       "signal": "One sentence: what happened and why it matters strategically.",
       "body": "2-3 sentences with real institutions, real numbers, real geographies. Specific enough to cite in a client meeting.",
-      "consulting_angle": "1-2 sentences on direct implication for Louis's work. Name specific clients or vendors. E.g. 'This accelerates Julius Baer's open architecture timeline — expect them to revisit the Avaloq implementation scope.'",
+      "consulting_angle": "1-2 sentences on the direct consulting implication. Name specific clients or vendors. Be precise. E.g. 'This accelerates Julius Baer's open architecture timeline — expect them to revisit the Avaloq implementation scope.'",
       "implications": [
-        {"icon": "🏦", "text": "Impact on private banks Louis advises"},
+        {"icon": "🏦", "text": "Impact on private banks in scope"},
         {"icon": "⚙️", "text": "Operational or technology implication"},
         {"icon": "📋", "text": "Strategic or regulatory watch-out"}
       ],
@@ -69,13 +78,13 @@ Generate exactly 1 narrative and 4 stories. Respond ONLY with valid JSON, no mar
 }
 
 Rules:
-- Pick 4 categories from: privatebanking / wealthtech / regulation / macro / ma
-- shortTag must match: Private Banking / Wealth Tech / Regulation / Macro / M&A
-- Each story from a different category
+- Each story's category must be one of: privatebanking / wealthtech / regulation / macro / ma
+- shortTag must match: privatebanking→"Private Banking" / wealthtech→"Wealth Tech" / regulation→"Regulation" / macro→"Macro" / ma→"M&A"
+- Stories may share categories — assign the genuinely best-fit category, never force diversity
 - consulting_angle is the MOST important field — make it specific, name clients/vendors
 - implications: exactly 3 items per story
 - Use REAL URLs from your web search results
-- Every story must pass the "Julius Baer client meeting" test`
+- Every story must pass the "client meeting at Julius Baer" test`
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {

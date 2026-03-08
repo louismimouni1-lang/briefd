@@ -73,6 +73,8 @@ body { background:var(--black); color:var(--text); font-family:'Sora',sans-serif
 .date-label { font-size:11px; font-weight:600; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; }
 .refresh-btn { background:var(--card); border:1px solid var(--border2); border-radius:20px; padding:5px 12px; font-size:11px; font-weight:600; color:var(--text-3); cursor:pointer; font-family:'Sora',sans-serif; }
 .refresh-btn:active { opacity:.7; }
+.print-btn { background:none; border:1px solid var(--border2); border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-3); }
+.print-btn:active { opacity:.7; }
 
 .loading-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px; }
 .spinner { width:26px; height:26px; border:2px solid var(--border2); border-top-color:var(--orange); border-radius:50%; animation:spin .8s linear infinite; }
@@ -158,6 +160,32 @@ body { background:var(--black); color:var(--text); font-family:'Sora',sans-serif
 .nav-item.active .nav-icon-wrap svg { stroke:var(--text); }
 .nav-label { font-size:10px; font-weight:500; color:var(--text-3); }
 .nav-item.active .nav-label { color:var(--text); font-weight:600; }
+
+@media print {
+  @page { margin:15mm 12mm; size:A4; }
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  body { background:#fff !important; color:#111 !important; max-width:100% !important; }
+  .header { position:static !important; }
+  .header-right, .markets, .filters, .nav, .refresh-btn, .print-btn, .save-btn, .card-footer, .overlay, .sheet { display:none !important; }
+  .feed { padding:0 !important; }
+  .date-row { padding:4px 0 8px !important; }
+  .date-label { color:#666 !important; }
+  .app-name { color:#111 !important; }
+  .app-name span { color:#888 !important; }
+  .narrative-block { border:1px solid #ddd !important; background:#fff !important; break-inside:avoid; }
+  .narrative-header { background:#f5f5f5 !important; border-bottom:1px solid #ddd !important; }
+  .narrative-title { color:#111 !important; }
+  .narrative-text, .narrative-text strong { color:#333 !important; }
+  .card { border:1px solid #ddd !important; background:#fff !important; cursor:default !important; break-inside:avoid; }
+  .card:active { opacity:1 !important; transform:none !important; }
+  .card-top-section { background:#f5f5f5 !important; border-bottom:1px solid #ddd !important; }
+  .card-headline { color:#111 !important; }
+  .card-bottom, .signal-text { color:#333 !important; }
+  .card-source { color:#666 !important; }
+  .angle-box { background:#f8f5f0 !important; }
+  .angle-text { color:#555 !important; }
+  .tag { border:1px solid currentColor !important; }
+}
 </style>
 </head>
 <body>
@@ -166,6 +194,9 @@ body { background:var(--black); color:var(--text); font-family:'Sora',sans-serif
   <div class="header-row">
     <div class="app-name">WM <span>Briefd</span></div>
     <div class="header-right">
+      <button class="print-btn" onclick="window.print()" title="Export PDF">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>
       <div class="live-pill"><div class="live-dot"></div>Live</div>
       <div class="clock" id="clock">--:-- HKT</div>
     </div>
@@ -226,6 +257,8 @@ body { background:var(--black); color:var(--text); font-family:'Sora',sans-serif
 <script>
 const TC = { privatebanking:'t-privatebanking', wealthtech:'t-wealthtech', regulation:'t-regulation', macro:'t-macro', ma:'t-ma' }
 const SC = { privatebanking:'var(--blue)', wealthtech:'var(--green)', regulation:'var(--amber)', macro:'var(--red)', ma:'var(--purple)' }
+const SC_DIM = { privatebanking:'#8fb8d0', wealthtech:'#60a88a', regulation:'#c0a050', macro:'#c06060', ma:'#9080b0' }
+const SC_BG = { privatebanking:'rgba(96,165,250,.06)', wealthtech:'rgba(48,215,128,.06)', regulation:'rgba(251,191,36,.06)', macro:'rgba(255,69,69,.06)', ma:'rgba(167,139,250,.06)' }
 const CACHE_KEY = 'wmbriefed_v2'
 const CACHE_TTL = 3 * 60 * 60 * 1000
 let ALL_NEWS = [], NARRATIVE = null, filter = 'all', saved = new Set(), current = null, activeTab = 'feed'
@@ -285,6 +318,8 @@ async function forceRefresh() {
 
 function tc(cat) { return TC[cat]||TC[(cat||'').toLowerCase()]||'t-privatebanking' }
 function sc(cat) { return SC[cat]||SC[(cat||'').toLowerCase()]||'var(--blue)' }
+function scd(cat) { return SC_DIM[cat]||SC_DIM[(cat||'').toLowerCase()]||'#8fb8d0' }
+function scb(cat) { return SC_BG[cat]||SC_BG[(cat||'').toLowerCase()]||'rgba(96,165,250,.06)' }
 
 function renderFeed() {
   const feed=document.getElementById('feed')
@@ -302,7 +337,7 @@ function renderFeed() {
     const t=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' HKT'
     nb.innerHTML=`
       <div class="narrative-header">
-        <div class="narrative-eyebrow">Morning Brief</div>
+        <div class="narrative-eyebrow">Executive Summary</div>
         <div class="narrative-time">${t}</div>
       </div>
       <div class="narrative-body">
@@ -344,7 +379,7 @@ function renderFeed() {
         <div class="card-source">${item.source}</div>
         <div class="signal-label" style="color:${sc(item.category)}">The Signal</div>
         <div class="signal-text">${signal}</div>
-        ${angle?`<div class="angle-box"><div class="angle-label">Consulting Angle</div><div class="angle-text">${angle}</div></div>`:''}
+        ${angle?`<div class="angle-box" style="border-left-color:${sc(item.category)};background:${scb(item.category)}"><div class="angle-label" style="color:${sc(item.category)}">Consulting Angle</div><div class="angle-text" style="color:${scd(item.category)}">${angle}</div></div>`:''}
         <div class="card-footer">
           <span class="card-dots">· · ·</span>
           <div class="dive-btn">Deep dive <svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -385,7 +420,7 @@ function openSheet(id) {
         <div class="sh-section-title" style="color:${sc(c.category)}">The Signal</div>
         <div class="sh-signal">${signal}</div>
       </div>
-      ${angle?`<div class="sh-section"><div class="sh-section-title" style="color:var(--orange)">Consulting Angle</div><div class="sh-angle">${angle}</div></div>`:''}
+      ${angle?`<div class="sh-section"><div class="sh-section-title" style="color:${sc(c.category)}">Consulting Angle</div><div class="sh-angle" style="border-left-color:${sc(c.category)};background:${scb(c.category)};color:${scd(c.category)}">${angle}</div></div>`:''}
       <div class="sh-section">
         <div class="sh-section-title">Context</div>
         <div class="sh-text">${c.body}</div>
@@ -408,6 +443,12 @@ function closeSheet() {
   document.body.style.overflow=''
 }
 function openSrc() { if(current?.url) window.open(current.url,'_blank') }
+
+window.addEventListener('beforeprint', () => {
+  const pf=filter, pt=activeTab
+  filter='all'; activeTab='feed'; renderFeed()
+  window.addEventListener('afterprint', () => { filter=pf; activeTab=pt; renderFeed() }, {once:true})
+})
 
 loadNews()
 </script>
