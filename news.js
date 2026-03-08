@@ -105,13 +105,11 @@ Rules:
     const textBlock = data.content.filter(b => b.type === 'text').pop()
     if (!textBlock) return res.status(500).json({ error: 'No text response from model' })
 
-    const raw = textBlock.text.trim()
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/```\s*$/i, '')
-      .trim()
+    const fullText = textBlock.text.trim()
+    const jsonMatch = fullText.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) return res.status(500).json({ error: 'No JSON found in response' })
 
-    const parsed = JSON.parse(raw)
+    const parsed = JSON.parse(jsonMatch[0])
     return res.status(200).json(parsed)
 
   } catch (err) {
