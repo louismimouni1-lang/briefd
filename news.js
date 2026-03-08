@@ -14,71 +14,68 @@ export default async function handler(req, res) {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   })
 
-  const prompt = `You are a senior analyst at EY's Global Wealth & Asset Management practice in Hong Kong. Today is ${today}.
+  const system = `You are a senior analyst at EY's Global Wealth & Asset Management practice in Hong Kong. You prepare daily morning briefs exclusively about the private banking and wealth management industry.
 
-You are preparing the daily morning brief for Louis, a management consultant who advises major private banks and wealth managers in Asia: HSBC Private Banking, UBS Wealth Management, Julius Baer, Standard Chartered Private Bank, Citibank Private Bank, DBS Private Bank, Bank of Singapore, Pictet, Lombard Odier, and similar institutions.
+CRITICAL: You only cover private banking and wealth management. You NEVER include generic stock market news, general tech news, or broad macro headlines. Every story must be directly useful to a management consultant advising private banks.`
 
-Louis's consulting work covers: PMS/technology platform selection and implementation, operating model transformation, outsourcing strategy, value proposition design, front office digitisation, regulatory compliance, and wealth management business model review. He is based in Hong Kong and covers Greater China, Southeast Asia, and global WM markets.
+  const prompt = `Today is ${today}. Prepare the morning brief for Louis.
 
-USE WEB SEARCH to find real news from the past 48-72 hours. Search specifically for:
-- "private banking Asia 2026" OR "wealth management Asia news"
-- "Avaloq OR Temenos OR InvestCloud OR Objectway OR additiv 2026"
-- "HKMA OR SFC OR MAS regulation wealth 2026"
-- "private bank acquisition merger 2026"
-- "wealth management technology fintech 2026"
+ABOUT LOUIS: Management consultant advising private banks and wealth managers in Asia — HSBC Private Banking, UBS WM, Julius Baer, Standard Chartered PB, DBS Private Bank, Bank of Singapore, Pictet, Lombard Odier, BNP Paribas WM. His work covers: PMS/technology platform selection (Avaloq, Temenos, InvestCloud, Objectway, additiv), operating model transformation, outsourcing, front office digitisation, regulatory compliance, WM business model review. Based in Hong Kong, covers Greater China, SEA, and global WM.
 
-STRICT EDITORIAL RULES:
-- Every story MUST be directly relevant to private banking or wealth management
-- NO generic stock market news unless it has a specific HNW/UHNW client impact angle
-- NO tech news unless it involves WM-specific technology vendors or AI applied to wealth management
-- NO general M&A unless it involves a bank, EAM, wealth platform, or WM technology vendor
-- If a story is not something Louis would use in a client meeting at HSBC or Julius Baer, exclude it
-- Prioritise: vendor moves, regulatory changes, private bank strategy shifts, WM industry consolidation, client behaviour trends
+SEARCH FOR NEWS using these queries (search each one):
+1. site:asianprivatebanker.com OR site:citywireasia.com OR site:wealthbriefingasia.com
+2. "private banking" AND (Asia OR "Hong Kong" OR Singapore) 2026
+3. (Avaloq OR Temenos OR InvestCloud OR Objectway OR additiv OR FNZ) wealth management 2026
+4. (HKMA OR SFC OR MAS OR FINMA) wealth management regulation 2026
+5. "wealth management" AND (acquisition OR merger OR partnership) 2026
+6. "private bank" AND (hire OR appointment OR headcount OR strategy) Asia 2026
 
-Generate exactly 1 narrative and 4 stories covering these categories (one per category, pick the 4 most relevant today):
-- "privatebanking" → developments at specific private banks (strategy, headcount, products, market moves)
-- "wealthtech" → PMS vendors, WM fintech, digital platforms, AI in wealth management
-- "regulation" → HKMA/SFC/MAS/FINMA rulings, compliance requirements, licensing
-- "macro" → macro/market moves with direct HNW/UHNW portfolio implications or bank revenue impact
-- "ma" → M&A and consolidation involving banks, EAMs, wealth platforms, WM tech vendors
+HARD EXCLUSIONS — do NOT include stories about:
+- Generic stock indices (HSI, S&P, Nikkei) unless there is a specific private bank revenue/AUM impact
+- Alibaba, Shopee, TikTok, or any consumer tech company
+- Retail banking products or mass-market fintech
+- Crypto/DeFi unless a specific private bank is launching a crypto desk
+- General M&A (e.g. PE buyouts) unless it involves a wealth manager, EAM, or WM tech vendor
+- Geopolitics or trade wars unless a specific private bank has issued guidance to HNW clients about it
 
-Respond ONLY with valid JSON, no markdown, no preamble:
+QUALITY TEST: Before including any story, ask: "Would Louis open a client meeting at Julius Baer or HSBC Private Banking by mentioning this?" If no, exclude it.
+
+Generate exactly 1 narrative and 4 stories. Respond ONLY with valid JSON, no markdown:
 {
   "generated": "${new Date().toISOString()}",
   "narrative": {
     "title": "Punchy title summarising today's dominant WM theme (max 8 words)",
-    "body": "3-4 sentences written directly to Louis. What is the dominant narrative this morning for the private banking world? Connect the dots between today's stories. What should he be thinking about walking into client meetings today? Write in second person, sharp and strategic — not a news summary."
+    "body": "3-4 sentences written directly to Louis in second person. What is the dominant narrative this morning for the private banking world? Connect the dots between stories. What should he think about walking into client meetings? Sharp and strategic, not a news summary."
   },
   "stories": [
     {
       "id": 1,
       "category": "privatebanking",
       "shortTag": "Private Banking",
-      "headline": "Specific, concrete headline — max 12 words. Name the institution.",
-      "source": "Source name (e.g. Bloomberg, Financial Times, Asian Private Banker)",
+      "headline": "Specific headline — max 12 words. Name the institution.",
+      "source": "Actual source (e.g. Asian Private Banker, Bloomberg, FT)",
       "time": "08:30",
-      "signal": "One sentence: what happened and the strategic significance.",
-      "body": "2-3 sentences of context. Name real institutions, real numbers, real geographies. Be specific enough that Louis could cite this in a client meeting.",
-      "consulting_angle": "1-2 sentences on the direct implication for Louis's consulting work or his specific clients. E.g. 'This puts pressure on Julius Baer's HK team to accelerate their open architecture rollout' or 'Expect HSBC PB to reference this in upcoming vendor RFP conversations.'",
+      "signal": "One sentence: what happened and why it matters strategically.",
+      "body": "2-3 sentences with real institutions, real numbers, real geographies. Specific enough to cite in a client meeting.",
+      "consulting_angle": "1-2 sentences on direct implication for Louis's work. Name specific clients or vendors. E.g. 'This accelerates Julius Baer's open architecture timeline — expect them to revisit the Avaloq implementation scope.'",
       "implications": [
-        {"icon": "🏦", "text": "Impact on private banks Louis works with"},
+        {"icon": "🏦", "text": "Impact on private banks Louis advises"},
         {"icon": "⚙️", "text": "Operational or technology implication"},
         {"icon": "📋", "text": "Strategic or regulatory watch-out"}
       ],
-      "url": "https://example.com"
+      "url": "https://actual-source-url.com/article"
     }
   ]
 }
 
 Rules:
-- narrative.body must be 3-4 sentences in second person, strategic framing not news summary
-- Generate exactly 4 stories, each from a different category
-- category must be one of: privatebanking / wealthtech / regulation / macro / ma
+- Pick 4 categories from: privatebanking / wealthtech / regulation / macro / ma
 - shortTag must match: Private Banking / Wealth Tech / Regulation / Macro / M&A
-- consulting_angle is the most important field — make it specific and actionable
-- implications array must have exactly 3 items
-- All stories must pass the test: "Would Louis use this in a client meeting at a private bank?"
-- Use real company names, real regulators, real numbers wherever possible`
+- Each story from a different category
+- consulting_angle is the MOST important field — make it specific, name clients/vendors
+- implications: exactly 3 items per story
+- Use REAL URLs from your web search results
+- Every story must pass the "Julius Baer client meeting" test`
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -90,12 +87,13 @@ Rules:
         'anthropic-beta': 'web-search-2025-03-05'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4000,
+        model: 'claude-sonnet-4-6-20250514',
+        max_tokens: 5000,
+        system,
         tools: [{
           type: 'web_search_20250305',
           name: 'web_search',
-          max_uses: 5
+          max_uses: 8
         }],
         messages: [{ role: 'user', content: prompt }]
       })
